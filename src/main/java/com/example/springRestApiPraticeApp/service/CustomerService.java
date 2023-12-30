@@ -19,7 +19,7 @@ public class CustomerService {
     public void createCustomer(Customer customer) {
         Optional<Customer> customerRepositoryById = customerRepository.findById(customer.getId());
         if (Objects.equals(customerRepositoryById,customer.getId()) || customerRepositoryById.get().getId()== customer.getId()){
-            throw new  CustomerNotFoundException("Customer duplicated  for customer ");
+            throw new  CustomerNotFoundException("MULTIPLE CUSTOMERS AVAILABLE ");
         }
 
         customerRepository.save(customer);
