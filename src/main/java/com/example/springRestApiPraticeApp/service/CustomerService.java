@@ -4,7 +4,6 @@ import com.example.springRestApiPraticeApp.entity.Customer;
 import com.example.springRestApiPraticeApp.exception.CustomerNotFoundException;
 import com.example.springRestApiPraticeApp.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +17,9 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
 
     public void createCustomer(Customer customer) {
-        Customer customerById = findCustomerById(customer.getId());
-        if (Objects.equals(customerById,customer.getId())){
-            throw new DuplicateKeyException("Customer available");
+        Optional<Customer> customerRepositoryById = customerRepository.findById(customer.getId());
+        if (Objects.equals(customerRepositoryById,customer.getId()) || customerRepositoryById.get().getId()== customer.getId()){
+            throw new  CustomerNotFoundException("Customer duplicated  for customer ");
         }
 
         customerRepository.save(customer);
@@ -40,23 +39,21 @@ public class CustomerService {
         return findById.get();
     }
 
-    public void updateCustomer(Customer customer){
+    public void updateCustomer(Customer customer) {
         Customer customerById = findCustomerById(customer.getId());
-        if (Objects.isNull(customerById)){
+        if (Objects.isNull(customerById)) {
             throw new NullPointerException();
         }
         customerRepository.save(customer);
     }
 
-    public void deleteCustomer(long customerId){
+    public void deleteCustomer(long customerId) {
         Customer customerById = findCustomerById(customerId);
-        if (Objects.isNull(customerById)){
+        if (Objects.isNull(customerById)) {
             throw new NullPointerException();
         }
         customerRepository.deleteById(customerById.getId());
     }
-
-
 
 
 }

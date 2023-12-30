@@ -19,7 +19,7 @@ public class CustomerController {
 
     private final CustomerService customerService;
 
-    @PostMapping("/customer")
+    @PostMapping("/createCustomer")
     public ResponseEntity<Void> createCustomer(@RequestBody Customer customer) {
 
         if (Objects.isNull(customer)) {
@@ -51,12 +51,8 @@ public class CustomerController {
     }
 
     @GetMapping("/customerById/{customerId}")
-    public Customer findCustomerById(@PathVariable long customerId) {
+    public ResponseEntity<Customer> findCustomerById(@PathVariable long customerId) {
         Customer customerById = customerService.findCustomerById(customerId);
-
-        if (Objects.isNull(customerById)) {
-            throw new CustomerNotFoundException("Customer not found by id: " + customerId);
-        }
-        return CustomerSuccessResponse.responseBuilder("Customer found successfully",HttpStatus.OK,customerById).getBody();
+        return CustomerSuccessResponse.responseBuilder("Customer found successfully",HttpStatus.OK,customerById);
     }
 }
